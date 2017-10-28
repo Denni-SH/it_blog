@@ -1,9 +1,12 @@
-#IT_blog#
+IT_blog
+=======
 <hr>
 
-##Requirements##
+Requirements
+------------
 
 All you need - to clone repository, create virtual environment in project folder:
+
     $ python3 -m venv env_name
 
 and install there dependencies:
