@@ -3,8 +3,9 @@
 from django.shortcuts import get_object_or_404,render
 from .models import Post, Category, Comment
 from django.shortcuts import redirect
-from django.views.generic import ListView, DetailView, CreateView,UpdateView
-from .forms import CategoryForm, PostForm, CommentForm
+from django.views.generic import ListView, DetailView, CreateView, UpdateView
+from .forms import PostForm, CommentForm
+from django.contrib.auth.decorators import login_required
 
 
 class CategoryListView(ListView):
@@ -13,10 +14,6 @@ class CategoryListView(ListView):
    context_object_name = 'categories'
 
 
-# class PostListView(ListView):
-#    template_name = 'blog_app/post_list.html'
-#    model = Post
-#    context_object_name = 'posts'
 def post_list(request,pk):
     m_list = Post.objects.filter(category=pk)
     context = {'posts': m_list}
@@ -25,7 +22,6 @@ def post_list(request,pk):
 class NewPost(CreateView):
    template_name = 'blog_app/new_post.html'
    form_class = PostForm
-   # change url
    success_url = '/'
 
 
@@ -33,10 +29,9 @@ class EditPost(UpdateView):
    template_name = 'blog_app/edit_post.html'
    form_class = PostForm
    context_object_name = 'post'
-   # change url
-   success_url = '/'
    model = Post
    pk_field = 'pk'
+   success_url = '/'
 
 
 class PostDetails(DetailView):
@@ -44,3 +39,29 @@ class PostDetails(DetailView):
    model = Post
    context_object_name = 'post'
    pk_field = 'pk'
+
+
+def add_comment(request, pk):
+    post = get_object_or_404(Post, pk=pk)
+    if request.method == "POST":
+        form = CommentForm(request.POST)
+        if form.is_valid():
+            comment = form.save(commit=False)
+            comment.post = post
+            comment.save()
+            return redirect('PostDetail', pk=post.pk)
+    else:
+        form = CommentForm()
+    return render(request, 'blog_app/add_comment.html', {'form': form})
+
+@login_required
+def approve_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.approve()
+    return redirect('PostDetail', pk=comment.post.pk)
+
+@login_required
+def remove_comment(request, pk):
+    comment = get_object_or_404(Comment, pk=pk)
+    comment.delete()
+    return redirect('PostDetail', pk=comment.post.pk)
