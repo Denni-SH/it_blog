@@ -10,10 +10,12 @@
         </p>
         <h1>
             <u>{{ post.title }}</u>
+            {% if user.is_authenticated %}
             &nbsp;&nbsp;&nbsp;&nbsp;
-            <a class="btn btn-default" href="{% url 'EditPost' pk=post.pk %}">
-                <span class="glyphicon glyphicon-pencil"></span>
-            </a>
+                <a class="btn btn-default" href="{% url 'EditPost' pk=post.pk %}">
+                    <span class="glyphicon glyphicon-pencil"></span>
+                </a>
+            {% endif %}
         </h1>
         <p>
             <label >
@@ -31,7 +33,9 @@
     <hr>
     <p><a href="{% url 'PostList' pk=post.pk %}">&lt;&lt;<u>Back</u></a></p>
     <hr>
-    <a class="btn btn-default" href="{% url 'AddComment' pk=post.pk %}">Add comment</a>
+    {% if user.is_authenticated %}
+        <a class="btn btn-default" href="{% url 'AddComment' pk=post.pk %}">Add comment</a>
+    {% endif %}
     {% for comment in post.comments.all %}
         {% if user.is_authenticated or comment.approved_comment %}
         <div class="comment">

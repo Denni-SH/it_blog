@@ -19,11 +19,11 @@ def post_list(request,pk):
     context = {'posts': m_list}
     return render(request, 'blog_app/post_list.html', context)
 
+
 class NewPost(CreateView):
    template_name = 'blog_app/new_post.html'
    form_class = PostForm
    success_url = '/'
-
 
 class EditPost(UpdateView):
    template_name = 'blog_app/edit_post.html'
@@ -40,7 +40,7 @@ class PostDetails(DetailView):
    context_object_name = 'post'
    pk_field = 'pk'
 
-
+@login_required
 def add_comment(request, pk):
     post = get_object_or_404(Post, pk=pk)
     if request.method == "POST":
