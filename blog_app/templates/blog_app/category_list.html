@@ -1,0 +1,19 @@
+{% extends 'blog_app/base.html' %}
+{% load staticfiles %}
+
+
+{% block content %}
+	<div class="book">	
+		<h1><u>IT Blog</u></h1>
+		<ul>
+			{%for category in categories%}
+				<li>
+					<h2>
+						<a href="{% url 'PostList' pk=category.pk %}">{{category.title}}</a>
+					</h2>
+				</li>
+			<hr>
+			{%endfor%}	
+		</ul>
+	</div>
+{% endblock %}

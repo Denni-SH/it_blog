@@ -1,0 +1,35 @@
+{% extends 'blog_app/base.html' %}
+
+
+{% block content %}
+    <form class="post-form">
+        <p>
+            <label >
+                {{ post.published_date }}
+            </label>
+        </p>
+        <h1>
+            <u>{{ post.title }}</u>
+            &nbsp;&nbsp;&nbsp;&nbsp;
+            <a class="btn btn-default" href="{% url 'EditPost' pk=post.pk %}">
+                <span class="glyphicon glyphicon-pencil"></span>
+            </a>
+        </h1>
+        <p>
+            <label >
+                <u>Category</u>: <a href="{% url 'PostList' pk=post.pk %}">{{ post.category }}</a>
+            </label>
+        </p>
+        <br>
+        <p>
+            <label >
+                {{ post.text|linebreaksbr }}
+            </label>
+        </p>
+    </form>
+    <br>
+    <hr>
+    <p><a href="{% url 'PostList' pk=post.pk %}">&lt;&lt;<u>Back</u></a></p>
+
+{#    <p><a href="/">&lt;&lt;<u>Back</u></a></p>#}
+{% endblock %}
