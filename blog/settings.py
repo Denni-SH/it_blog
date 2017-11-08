@@ -14,7 +14,7 @@ import os
 
 # Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-
+PROJECT_PATH = os.path.join(BASE_DIR, 'shop/../templates')
 
 # Quick-start development settings - unsuitable for production
 # See https://docs.djangoproject.com/en/1.11/howto/deployment/checklist/
@@ -26,6 +26,8 @@ SECRET_KEY = 'a)4s#-zk4hw$2)i3t=4c+fr1+fskahm@lfwcb1o5zwizl=_($2'
 DEBUG = True
 
 ALLOWED_HOSTS = []
+AUTH_USER_MODEL = "blog_auth.CustomUser"
+ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
 
 
 # Application definition
@@ -37,7 +39,8 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
-    'blog_app',
+    # 'blog_app',
+    'blog_auth',
 ]
 
 MIDDLEWARE = [
@@ -55,7 +58,7 @@ ROOT_URLCONF = 'blog.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [],
+        'DIRS': [PROJECT_PATH,],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -77,7 +80,7 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'blog_db',
+        'NAME': 'it_blog', #'blog_db'
         'USER' : 'den',
         'PASSWORD' : '1234',
         'HOST' : '127.0.0.1',

@@ -19,8 +19,12 @@
                     <span class="glyphicon glyphicon-plus"></span>
                 </a>
             {% else %}
+
                 <a href="{% url 'login' %}" class="top-menu">
                     <span class="glyphicon glyphicon-log-in"></span>
+                </a>
+                <a href="{% url 'register' %}" class="top-menu">
+                    <span class="glyphicon glyphicon-user"></span>
                 </a>
             {% endif %}
             <h1><a href="/">IT Blog</a></h1>

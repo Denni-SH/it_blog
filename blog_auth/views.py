@@ -1,15 +1,27 @@
 # -*- coding: utf-8 -*-
 
 from django.shortcuts import get_object_or_404,render
-from .models import Post, Category, Comment
 from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
-from .forms import PostForm, CommentForm
+from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from .models import Post, Category, Comment, CustomUser
+from .forms import PostForm, CommentForm, UserCreation
+
+
+class SignUp(CreateView):
+    template_name = "registration/register.html"
+    model = CustomUser
+    form_class = UserCreation
+    success_url = "/"
+
+
+class SignIn(LoginView):
+    template_name = 'registration/login.html'
 
 
 class CategoryListView(ListView):
-   template_name = 'blog_app/category_list.html'
+   template_name = 'blog_auth/category_list.html'
    model = Category
    context_object_name = 'categories'
 
@@ -17,16 +29,17 @@ class CategoryListView(ListView):
 def post_list(request,pk):
     m_list = Post.objects.filter(category=pk)
     context = {'posts': m_list}
-    return render(request, 'blog_app/post_list.html', context)
+    return render(request, 'blog_auth/post_list.html', context)
 
 
 class NewPost(CreateView):
-   template_name = 'blog_app/new_post.html'
+   template_name = 'blog_auth/new_post.html'
    form_class = PostForm
    success_url = '/'
 
+
 class EditPost(UpdateView):
-   template_name = 'blog_app/edit_post.html'
+   template_name = 'blog_auth/edit_post.html'
    form_class = PostForm
    context_object_name = 'post'
    model = Post
@@ -35,10 +48,11 @@ class EditPost(UpdateView):
 
 
 class PostDetails(DetailView):
-   template_name = 'blog_app/details.html'
+   template_name = 'blog_auth/details.html'
    model = Post
    context_object_name = 'post'
    pk_field = 'pk'
+
 
 @login_required
 def add_comment(request, pk):
@@ -52,13 +66,15 @@ def add_comment(request, pk):
             return redirect('PostDetail', pk=post.pk)
     else:
         form = CommentForm()
-    return render(request, 'blog_app/add_comment.html', {'form': form})
+    return render(request, 'blog_auth/add_comment.html', {'form': form})
 
-@login_required
-def approve_comment(request, pk):
-    comment = get_object_or_404(Comment, pk=pk)
-    comment.approve()
-    return redirect('PostDetail', pk=comment.post.pk)
+
+# @login_required
+# def approve_comment(request, pk):
+#     comment = get_object_or_404(Comment, pk=pk)
+#     comment.approve()
+#     return redirect('PostDetail', pk=comment.post.pk)
+#
 
 @login_required
 def remove_comment(request, pk):
