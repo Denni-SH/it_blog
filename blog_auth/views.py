@@ -8,6 +8,19 @@ from django.contrib.auth.decorators import login_required
 from .models import Post, Category, Comment, CustomUser
 from .forms import PostForm, CommentForm, UserCreation
 
+def add_like(request, pk):
+    if request.user.is_authenticated():
+        post = get_object_or_404(Post, pk=pk)
+        if request.user not in post.user_likes.all():
+            post.likes += 1
+            post.user_likes.add(request.user)
+            post.save()
+        else:
+            post.likes -= 1
+            post.user_likes.remove(request.user)
+            post.save()
+    return redirect(request.GET.get('next', '/post/%s' %pk))
+
 
 class SignUp(CreateView):
     template_name = "registration/register.html"
@@ -67,14 +80,6 @@ def add_comment(request, pk):
     else:
         form = CommentForm()
     return render(request, 'blog_auth/add_comment.html', {'form': form})
-
-
-# @login_required
-# def approve_comment(request, pk):
-#     comment = get_object_or_404(Comment, pk=pk)
-#     comment.approve()
-#     return redirect('PostDetail', pk=comment.post.pk)
-#
 
 @login_required
 def remove_comment(request, pk):

@@ -1,6 +1,7 @@
 # -*- coding: utf-8 -*-
 from __future__ import unicode_literals
 from  django.contrib.auth.models import *
+from django.contrib.contenttypes.models import ContentType
 
 
 class CustomUser(AbstractUser):
@@ -22,6 +23,8 @@ class Post(models.Model):
             default=timezone.now)
     published_date = models.DateTimeField(
             blank=True, null=True)
+    likes = models.IntegerField(verbose_name='I like ', default=0)
+    user_likes = models.ManyToManyField(CustomUser, blank=True, related_name='post_likes')
 
     def publish(self):
         self.published_date = timezone.now()
@@ -39,3 +42,4 @@ class Comment(models.Model):
 
     def __str__(self):
         return str(self.pk) + ' - ' + str(self.text)
+
