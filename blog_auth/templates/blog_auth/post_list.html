@@ -4,7 +4,12 @@
 
 {% block content %}
 	<div class="book">	
-		<h1><u>Posts:</u></h1>
+		<h1><u>{{ title }}</u></h1>
+        <p>
+            <label >
+                <u>Category</u>: {{ category }}
+            </label>
+        </p>
 		<ul>
 			{%for post in posts%}
 				<li>

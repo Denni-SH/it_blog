@@ -5,6 +5,7 @@ from django.shortcuts import redirect
 from django.views.generic import ListView, DetailView, CreateView, UpdateView
 from django.contrib.auth.views import LoginView
 from django.contrib.auth.decorators import login_required
+from django.db.models import Max
 from .models import Post, Category, Comment, CustomUser
 from .forms import PostForm, CommentForm, UserCreation
 
@@ -41,7 +42,9 @@ class CategoryListView(ListView):
 
 def post_list(request,pk):
     m_list = Post.objects.filter(category=pk)
-    context = {'posts': m_list}
+    context = {'posts': m_list,
+               'title': 'Our posts:',
+               'category': m_list[0].category}
     return render(request, 'blog_auth/post_list.html', context)
 
 
@@ -86,3 +89,12 @@ def remove_comment(request, pk):
     comment = get_object_or_404(Comment, pk=pk)
     comment.delete()
     return redirect('PostDetail', pk=comment.post.pk)
+
+def top(request):
+    max_count = Post.objects.all().aggregate(max_likes=Max('likes'))
+    top_posts = max_count.get('max_likes')
+    result = Post.objects.filter(likes = top_posts).order_by('-published_date')[:3]
+    context = {'posts': result,
+               'title': 'Top 3 posts:',
+               'category': 'all categories'}
+    return render(request, 'blog_auth/post_list.html', context)
