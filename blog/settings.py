@@ -25,7 +25,7 @@ SECRET_KEY = 'a)4s#-zk4hw$2)i3t=4c+fr1+fskahm@lfwcb1o5zwizl=_($2'
 # SECURITY WARNING: don't run with debug turned on in production!
 DEBUG = True
 
-ALLOWED_HOSTS = []
+ALLOWED_HOSTS = ['testserver']
 AUTH_USER_MODEL = "blog_auth.CustomUser"
 ACCOUNT_ACTIVATION_DAYS = 7 # One-week activation window; you may, of course, use a different value.
 
@@ -85,6 +85,9 @@ DATABASES = {
         'PASSWORD' : '1234',
         'HOST' : '127.0.0.1',
         'PORT' : '5432',
+        'TEST': {
+            'NAME': 'test_blog',
+        },
     }
 }
 
