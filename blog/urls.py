@@ -16,10 +16,13 @@ Including another URLconf
 from django.conf.urls import url,include
 from django.contrib import admin
 from django.contrib.auth import views
+from cust_app import views as cust_views
 
 urlpatterns = [
     url(r'^admin/', admin.site.urls),
     url(r'^accounts/login/$', views.login, name='login'),
     url(r'^accounts/logout/$', views.logout, name='logout', kwargs={'next_page': '/'}),
+    url(r'^auth/login/$', cust_views.SignForm.as_view(), name='login'),
+    url(r'^auth/logout/$', views.logout, name='logout', kwargs={'next_page': '/'}),
     url(r'',include('blog_app.urls')),
 ]

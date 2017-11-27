@@ -26,7 +26,7 @@ SECRET_KEY = 'a)4s#-zk4hw$2)i3t=4c+fr1+fskahm@lfwcb1o5zwizl=_($2'
 DEBUG = True
 
 ALLOWED_HOSTS = []
-
+AUTH_USER_MODEL = 'cust_app.CustomUser'
 
 # Application definition
 
@@ -38,6 +38,7 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'blog_app',
+    'cust_app',
 ]
 
 MIDDLEWARE = [
@@ -77,10 +78,10 @@ WSGI_APPLICATION = 'blog.wsgi.application'
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.postgresql_psycopg2',
-        'NAME': 'blog_db',
-        'USER' : 'den',
-        'PASSWORD' : '1234',
-        'HOST' : '127.0.0.1',
+        'NAME': 'auth_db', #'blog_db',
+        'USER' : 'postgres',
+        'PASSWORD' : '',
+        'HOST' : 'postgres',
         'PORT' : '5432',
     }
 }
